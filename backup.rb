@@ -7,27 +7,27 @@ servers = ["bungee", "corona", "faf", "lobby", "plot", "testing"]
 files = ""
 puts "Starting backup"
 puts "Starting copy"
-system("mkdir /var/minecraft/temp")
+system("mkdir #{__dir__}/temp")
 servers.each do |server|
-  system("mkdir /var/minecraft/temp/#{server}")
+  system("mkdir #{__dir__}/temp/#{server}")
   files << " #{server}"
   if server == "bungee"
     system('screen -S bungee -p 0 -X stuff "lpb export luckperms^M"')
-    system('sleep 1')
-    system("cp /var/minecraft/bungee/plugins/LuckPerms/luckperms.json.gz /var/minecraft/temp/bungee/luckperms.json.gz")
-    system("rm /var/minecraft/bungee/plugins/LuckPerms/luckperms.json.gz")
-    system("cp /var/minecraft/bungee/config.yml /var/minecraft/temp/bungee/config.yml")
-    system("cp /var/minecraft/bungee/plugins/ServerListPlus/ServerListPlus.yml /var/minecraft/temp/bungee/ServerListPlus.yml")
-    system("cp /var/minecraft/bungee/plugins/BungeeSafeguard/config.yml /var/minecraft/temp/bungee/whitelist\\(BungeeSafeguard\\).yml")
+    system("sleep 2")
+    system("cp #{__dir__}/bungee/plugins/LuckPerms/luckperms.json.gz #{__dir__}/temp/bungee/luckperms.json.gz")
+    system("rm #{__dir__}/bungee/plugins/LuckPerms/luckperms.json.gz")
+    system("cp #{__dir__}/bungee/config.yml #{__dir__}/temp/bungee/config.yml")
+    system("cp #{__dir__}/bungee/plugins/ServerListPlus/ServerListPlus.yml #{__dir__}/temp/bungee/ServerListPlus.yml")
+    system("cp #{__dir__}/bungee/plugins/BungeeSafeguard/config.yml #{__dir__}/temp/bungee/whitelist\\(BungeeSafeguard\\).yml")
   else
-    system("cp -r /var/minecraft/#{server}/world /var/minecraft/temp/#{server}/world")
-    system("cp -r /var/minecraft/#{server}/server.properties /var/minecraft/temp/#{server}/server.properties")
+    system("cp -r #{__dir__}/#{server}/world /#{__dir__}/temp/#{server}/world")
+    system("cp -r #{__dir__}/#{server}/server.properties #{__dir__}/temp/#{server}/server.properties")
     unless server == "lobby"
-      system("cp -r /var/minecraft/#{server}/world_nether /var/minecraft/temp/#{server}/world_nether")
-      system("cp -r /var/minecraft/#{server}/world_the_end /var/minecraft/temp/#{server}/world_the_end")
+      system("cp -r #{__dir__}/#{server}/world_nether #{__dir__}/temp/#{server}/world_nether")
+      system("cp -r #{__dir__}/#{server}/world_the_end #{__dir__}/temp/#{server}/world_the_end")
     end
   end
-  ls = `ls /var/minecraft/#{server}/plugins`
+  ls = `ls #{__dir__}/#{server}/plugins`
   plugins = ls.split(/\n/)
   jars = []
   plugins.each do |plugin|
@@ -35,29 +35,29 @@ servers.each do |server|
       jars.append(plugin)
     end
   end
-  File.write("/var/minecraft/temp/#{server}/plugins.json", JSON.pretty_generate({:plugins => jars}))
+  File.write("#{__dir__}/temp/#{server}/plugins.json", JSON.pretty_generate({:plugins => jars}))
 end
 puts "Finished copy"
 puts "Starting zipping proccess"
-system("rm /var/minecraft/backup.zip")
-Dir.chdir("/var/minecraft/temp") do
-  system("zip -r /var/minecraft/backup.zip#{files}")
+system("rm #{__dir__}/backup.zip")
+Dir.chdir("#{__dir__}/temp") do
+  system("zip -r #{__dir__}/backup.zip#{files}")
 end
-system("rm -rf /var/minecraft/temp")
+system("rm -rf #{__dir__}/temp")
 puts "Finished zipping proccess"
 puts "Starting upload"
 
-json = File.read('/var/minecraft/api-keys.json')
+json = File.read("#{__dir__}/api-keys.json")
 obj = JSON.parse(json)
 
 client = Aws::S3::Client.new(
   access_key_id: obj["access"],
   secret_access_key: obj["secret"],
-  endpoint: 'https://nyc3.digitaloceanspaces.com',
-  region: 'us-east-1'
+  endpoint: "https://nyc3.digitaloceanspaces.com",
+  region: "us-east-1"
 )
 
-File.open('/var/minecraft/backup.zip', 'rb') do |file|
+File.open("#{__dir__}/backup.zip", "rb") do |file|
   client.put_object({
     bucket: "vorus-websites-cdn",
     key: "minecraft/backup.zip",
