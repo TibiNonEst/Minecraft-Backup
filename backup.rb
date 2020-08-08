@@ -25,7 +25,7 @@ servers.each do |server|
   else
     system("cp -r #{__dir__}/#{server}/world /#{__dir__}/temp/#{server}/world")
     system("cp -r #{__dir__}/#{server}/server.properties #{__dir__}/temp/#{server}/server.properties")
-    unless config.lobbies.include?server
+    unless config["lobbies"].include?server
       system("cp -r #{__dir__}/#{server}/world_nether #{__dir__}/temp/#{server}/world_nether")
       system("cp -r #{__dir__}/#{server}/world_the_end #{__dir__}/temp/#{server}/world_the_end")
     end
