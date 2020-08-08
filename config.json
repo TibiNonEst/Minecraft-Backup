@@ -1,0 +1,7 @@
+{
+  "servers": ["ENTER","SERVERS"],
+  "keys": {
+    "access": "ENTER SPACE ACCESS KEY",
+    "secret": "ENTER SPACE SECRET KEY"
+  }
+}

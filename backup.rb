@@ -3,7 +3,10 @@ require 'rubygems'
 require 'json'
 require 'aws-sdk-s3'
 
-servers = ["bungee", "corona", "faf", "lobby", "plot", "testing"]
+json = File.read("#{__dir__}/api-keys.json")
+config = JSON.parse(json)
+servers = config["servers"]
+
 files = ""
 puts "Starting backup"
 puts "Starting copy"
@@ -47,12 +50,11 @@ system("rm -rf #{__dir__}/temp")
 puts "Finished zipping proccess"
 puts "Starting upload"
 
-json = File.read("#{__dir__}/api-keys.json")
-obj = JSON.parse(json)
+keys = config["keys"]
 
 client = Aws::S3::Client.new(
-  access_key_id: obj["access"],
-  secret_access_key: obj["secret"],
+  access_key_id: keys["access"],
+  secret_access_key: keys["secret"],
   endpoint: "https://nyc3.digitaloceanspaces.com",
   region: "us-east-1"
 )
