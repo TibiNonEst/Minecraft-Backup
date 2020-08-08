@@ -3,7 +3,7 @@ require 'rubygems'
 require 'json'
 require 'aws-sdk-s3'
 
-json = File.read("#{__dir__}/api-keys.json")
+json = File.read("#{__dir__}/config.json")
 config = JSON.parse(json)
 servers = config["servers"]
 
