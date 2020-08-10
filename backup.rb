@@ -14,6 +14,7 @@ system("mkdir #{__dir__}/temp")
 servers.each do |server|
   system("mkdir #{__dir__}/temp/#{server}")
   files << " #{server}"
+  system("cp -r #{__dir__}/#{server}/logs /#{__dir__}/temp/#{server}/logs")
   if server == "bungee"
     system('screen -S bungee -p 0 -X stuff "lpb export luckperms^M"')
     system("sleep 2")
