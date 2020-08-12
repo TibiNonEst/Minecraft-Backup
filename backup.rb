@@ -15,14 +15,14 @@ servers.each do |server|
   system("mkdir #{__dir__}/temp/#{server}")
   files << " #{server}"
   system("cp -r #{__dir__}/#{server}/logs /#{__dir__}/temp/#{server}/logs")
-  if server == "bungee"
-    system('screen -S bungee -p 0 -X stuff "lpb export luckperms^M"')
+  if config["proxies"].include?server
+    system("screen -S #{server} -p 0 -X stuff \"lpb export luckperms^M\"")
     system("sleep 2")
-    system("cp #{__dir__}/bungee/plugins/LuckPerms/luckperms.json.gz #{__dir__}/temp/bungee/luckperms.json.gz")
-    system("rm #{__dir__}/bungee/plugins/LuckPerms/luckperms.json.gz")
-    system("cp #{__dir__}/bungee/config.yml #{__dir__}/temp/bungee/config.yml")
-    system("cp #{__dir__}/bungee/plugins/ServerListPlus/ServerListPlus.yml #{__dir__}/temp/bungee/ServerListPlus.yml")
-    system("cp #{__dir__}/bungee/plugins/BungeeSafeguard/config.yml #{__dir__}/temp/bungee/whitelist\\(BungeeSafeguard\\).yml")
+    system("cp #{__dir__}/#{server}/plugins/LuckPerms/luckperms.json.gz #{__dir__}/temp/#{server}/luckperms.json.gz")
+    system("rm #{__dir__}/#{server}/plugins/LuckPerms/luckperms.json.gz")
+    system("cp #{__dir__}/#{server}/config.yml #{__dir__}/temp/#{server}/config.yml")
+    system("cp #{__dir__}/#{server}/plugins/ServerListPlus/ServerListPlus.yml #{__dir__}/temp/#{server}/ServerListPlus.yml")
+    system("cp #{__dir__}/#{server}/plugins/BungeeSafeguard/config.yml #{__dir__}/temp/#{server}/whitelist\\(BungeeSafeguard\\).yml")
   else
     system("cp -r #{__dir__}/#{server}/world /#{__dir__}/temp/#{server}/world")
     system("cp -r #{__dir__}/#{server}/server.properties #{__dir__}/temp/#{server}/server.properties")

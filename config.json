@@ -1,6 +1,7 @@
 {
   "servers": ["ENTER","SERVERS"],
-  "lobbies": ["ENTER","LOBBIES", "*lobbies still need to be in servers above*"],
+  "proxies": ["ENTER","PROXIES","*proxies still need to be in servers above*"],
+  "lobbies": ["ENTER","LOBBIES","*lobbies still need to be in servers above*"],
   "keys": {
     "access": "ENTER SPACE ACCESS KEY",
     "secret": "ENTER SPACE SECRET KEY"
