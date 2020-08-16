@@ -5,7 +5,10 @@ require 'aws-sdk-s3'
 
 json = File.read("#{__dir__}/config.json")
 config = JSON.parse(json)
-servers = config["servers"]
+servers = config["servers"] + config["proxies"] + config["lobbies"]
+servers - (config["servers"] & config["proxies"])
+servers - (config["servers"] & config["lobbies"])
+servers - (config["proxies"] & config["lobbies"])
 
 files = ""
 puts "Starting backup"
