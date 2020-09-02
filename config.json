@@ -1,9 +1,15 @@
 {
   "servers": ["ENTER","SERVERS"],
-  "proxies": ["ENTER","PROXIES"],
-  "lobbies": ["ENTER","LOBBIES"],
+  "proxies": ["PROXY(S)"],
+  "lobbies": ["ENTER", "LOBBIES"],
+  "s3": {
+    "bucket": "BUCKET",
+    "region": "REGION",
+    "endpoint": "ENDPOINT",
+    "object": "OBJECT KEY"
+  },
   "keys": {
-    "access": "ENTER SPACE ACCESS KEY",
-    "secret": "ENTER SPACE SECRET KEY"
+    "access": "ACCESS KEY",
+    "secret": "SECRET KEY"
   }
 }

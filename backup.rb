@@ -13,6 +13,7 @@ servers - (config["proxies"] & config["lobbies"])
 files = ""
 puts "Starting backup"
 puts "Starting copy"
+
 system("mkdir #{__dir__}/temp")
 servers.each do |server|
   system("mkdir #{__dir__}/temp/#{server}")
@@ -45,8 +46,8 @@ servers.each do |server|
   File.write("#{__dir__}/temp/#{server}/plugins.json", JSON.pretty_generate({:plugins => jars}))
 end
 puts "Finished copy"
+File.delete("#{__dir__}/backup.zip") if File.exist?("#{__dir__}/backup.zip")
 puts "Starting zipping proccess"
-system("rm #{__dir__}/backup.zip")
 Dir.chdir("#{__dir__}/temp") do
   system("zip -r #{__dir__}/backup.zip#{files}")
 end
@@ -55,21 +56,11 @@ puts "Finished zipping proccess"
 puts "Starting upload"
 
 keys = config["keys"]
+s3config = config["s3"]
+s3 = Aws::S3::Resource.new(region: s3config["region"], endpoint: s3config["endpoint"], access_key_id: keys["access"], secret_access_key: keys["secret"])
+obj = s3.bucket(s3config["bucket"]).object(s3config["object"])
+obj.upload_file("#{__dir__}/backup.zip")
 
-client = Aws::S3::Client.new(
-  access_key_id: keys["access"],
-  secret_access_key: keys["secret"],
-  endpoint: "https://nyc3.digitaloceanspaces.com",
-  region: "us-east-1"
-)
-
-File.open("#{__dir__}/backup.zip", "rb") do |file|
-  client.put_object({
-    bucket: "vorus-websites-cdn",
-    key: "minecraft/backup.zip",
-    body: file,
-    acl: "public-read"
-  })
-end
 puts "Upload done"
+File.delete("#{__dir__}/backup.zip")
 puts "Backup Complete!"
