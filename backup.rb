@@ -43,7 +43,7 @@ servers.each do |server|
       jars.append(plugin)
     end
   end
-  File.write("#{__dir__}/temp/#{server}/plugins.json", JSON.pretty_generate({:plugins => jars}))
+  File.write("#{__dir__}/temp/#{server}/plugins.json", JSON.pretty_generate(jars)
 end
 puts "Finished copy"
 File.delete("#{__dir__}/backup.zip") if File.exist?("#{__dir__}/backup.zip")
