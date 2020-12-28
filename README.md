@@ -1,5 +1,5 @@
-# The Cluster Backup Script
-A script to backup [The Cluster](https://thecluster.xyz "The Cluster") Minecraft Network.
+# Minecraft Backup Script
+A simple script to a Minecraft network.
 
 ### What it does:
 - Backup world files from enabled servers
